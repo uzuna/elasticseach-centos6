@@ -1,0 +1,6 @@
+elasticsearch-curator:
+  restart: always
+  image: elasticsearch-curator:4.1
+  volumes:
+    - $PWD/curator:/apps
+  command: ["python", "/apps/start.py"]
