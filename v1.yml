@@ -1,0 +1,55 @@
+# Elastic Search
+elasticsearch:
+  restart: always
+  image: elasticsearch
+  environment:
+    ES_HEAP_SIZE: 1g
+  volumes:
+    - $PWD/esdata:/usr/share/elasticsearch/data
+    - $PWD/plugins:/usr/share/elasticsearch/plugins
+    - $PWD/snapshot:/var/elasticsearch/snapshot
+    - $PWD/elasticsearch/elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml
+  ports:
+    - 9200:9200
+  container_name: elasticsearch
+  log_driver: syslog
+  log_opt:
+    syslog-address: "udp://localhost:5140"
+  cpu_shares: 100
+
+# localhost -> elasticsearch
+fluent-forward:
+  restart: always
+  image: fluent-es
+  links:
+    - elasticsearch
+  ports:
+    - 5140:5140/udp
+    - 24224:24224/tcp
+    - 24224:24224/udp
+  volumes:
+    - $PWD/fluent/fluent-debug.conf:/fluentd/etc/fluent.conf
+  log_driver: none
+
+
+# kibana
+kibana:
+  restart: always
+  image: kibana
+  ports:
+    - 5601:5601
+  links:
+    - elasticsearch:elasticsearch
+  container_name: kibana
+  log_driver: none
+
+# cron curastor
+# elasticsearch-curator:
+#   restart: always
+#   image: elasticsearch-curator:4.1
+#   volumes:
+#     - $PWD/curator/curator:/apps
+#     - $PWD/curator/cron:/cron
+#   command: ["sh", "/apps/start.sh"]
+#   log_opt:
+#     syslog-address: "udp://localhost:5140"

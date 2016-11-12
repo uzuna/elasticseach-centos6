@@ -1,45 +1,54 @@
-# Elastic Search
-elasticsearch:
-  restart: always
-  image: elasticsearch
-  environment:
-    ES_HEAP_SIZE: 1g
-  volumes:
-    - $PWD/esdata:/usr/share/elasticsearch/data
-    - $PWD/plugins:/usr/share/elasticsearch/plugins
-  ports:
-    - 9200:9200
-  container_name: elasticsearch
-  log_driver: syslog
-  log_opt:
-    syslog-address: "udp://localhost:5140"
-  cpu_shares: 100
+version: '2'
+services:
+  elasticsearch:
+    restart: always
+    image: elasticsearch:5.0
+    environment:
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+      # ES_HOME: /eshome
+      # ES_HEAP_SIZE: 1g
+    volumes:
+      - $PWD/esdata:/data
+      # - $PWD/elasticsearch:/eshome/config
+      - $PWD/elasticsearch/elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml
+    ports:
+      - 9200:9200
+    logging:
+      driver: "json-file"
+      # driver: "syslog"
+      # options:
+      #   syslog-address: "udp://localhost:5140"
+    # command: ["elasticsearch", "-Epath.conf=/etc/elasticsearch"]
 
-# localhost -> elasticsearch
-fluent-forward:
-  restart: always
-  image: fluent-es
-  links:
-    - elasticsearch
-  ports:
-    - 5140:5140/udp
-    - 24224:24224/tcp
-    - 24224:24224/udp
-  volumes:
-    - $PWD/fluent/fluent-debug.conf:/fluentd/etc/fluent.conf
-  log_driver: none
+  # localhost -> elasticsearch
+  fluent-forward:
+    restart: always
+    image: fluent-es
+    links:
+      - elasticsearch
+    ports:
+      - 5140:5140/udp
+      - 24224:24224/tcp
+      - 24224:24224/udp
+    volumes:
+      - $PWD/fluent/fluent-debug.conf:/fluentd/etc/fluent.conf
+    logging:
+      driver: "syslog"
+      options:
+        syslog-address: "udp://localhost:5140"
 
 
-# kibana
-kibana:
-  restart: always
-  image: kibana
-  ports:
-    - 5601:5601
-  links:
-    - elasticsearch:elasticsearch
-  container_name: kibana
-  log_driver: none
+  # kibana
+  kibana:
+    restart: always
+    image: kibana
+    ports:
+      - 5601:5601
+    links:
+      - elasticsearch:elasticsearch
+    container_name: kibana
+    logging:
+      driver: "none"
 
 # cron curastor
 # elasticsearch-curator:
