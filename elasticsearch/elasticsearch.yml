@@ -20,7 +20,7 @@ cluster.name: adllog
 #
 # Use a descriptive name for the node:
 #
-node.name: node-0
+node.name: node-test-5
 #
 # Add custom attributes to the node:
 #
@@ -31,10 +31,10 @@ node.name: node-0
 # Path to directory where to store the data (separate multiple locations by comma):
 #
 # path.data: /path/to/data
-path:
-  logs: /data/log
-  data: /data/data
-  repo: /data/snapshot
+# path:
+#   logs: /data/log
+#   data: /data/data
+#   repo: /data/snapshot
 #
 # Path to log files:
 #
@@ -56,10 +56,11 @@ path:
 # Set the bind address to a specific IP (IPv4 or IPv6):
 #
 # network.host: 192.168.0.1
+network.host: 0.0.0.0
 #
 # Set a custom port for HTTP:
 #
-# http.port: 9200
+http.port: 9200
 #
 # For more information, see the documentation at:
 # <http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-network.html>
@@ -96,9 +97,3 @@ path:
 # Require explicit names when deleting indices:
 #
 # action.destructive_requires_name: true
-
-# ---------------------------------- IndexShards -----------------------------------
-#
-
-index.number_of_shards: 1
-index.number_of_replicas: 0

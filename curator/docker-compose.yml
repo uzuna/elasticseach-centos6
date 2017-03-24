@@ -1,6 +1,11 @@
-elasticsearch-curator:
-  restart: always
-  image: elasticsearch-curator:4.1
-  volumes:
-    - $PWD/curator:/apps
-  command: ["python", "/apps/start.py"]
+version: '2'
+services:
+  elasticsearch-curator:
+    restart: always
+    image: elasticsearch-curator:5.0
+    volumes:
+      - $PWD/curator:/apps
+    command: ["python", "/apps/start.py"]
+    external_links:
+      - ess5:elasticsearch
+    network_mode: "elasticsearch_default"  

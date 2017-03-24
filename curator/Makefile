@@ -1,6 +1,6 @@
 # SystemArguments
 NAME = elasticsearch-curator
-VERSION = 4.1
+VERSION = 5.0
 
 # Build Arguments
 #HTTP_PROXY=

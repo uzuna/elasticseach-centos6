@@ -27,3 +27,5 @@ cron = 最小単位毎分
 
 
 jobは直接セットできない = root権限がひつよう
+
+pip install git+git://github.com/elastic/curator.git@5.0

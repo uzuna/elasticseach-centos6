@@ -15,8 +15,8 @@ def job_curator():
   rs = runcmd("sh /apps/cron.sh")
 
 
-schedule.every(1).seconds.do(job_test)
+# schedule.every(1).seconds.do(job_test)
 
 while True:
-  schedule.run_pending()
-  time.sleep(1)
+  # schedule.run_pending()
+  time.sleep(60)
